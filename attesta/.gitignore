@@ -1,0 +1,43 @@
+# Dependencies
+/node_modules
+/.pnpm-store
+/yarn.lock
+/pnpm-lock.yaml
+
+# Next.js Build Output
+/.next/
+/out/
+/build
+
+# Environment Variables (Keep local secrets out of git)
+.env*.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Operating System Files
+.DS_Store
+[Th]umbs.db
+
+# Debug & Execution Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE & Editor Settings
+/.idea
+/.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Testing & Coverage
+/coverage
+/.nyc_output
+
+# Vercel Deployment Metadata
+/.vercel
