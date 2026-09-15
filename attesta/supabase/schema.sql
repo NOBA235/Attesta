@@ -170,3 +170,11 @@ create policy "org members can update their questionnaire items"
         and q.org_id = (auth.jwt() ->> 'org_id')::uuid
     )
   );
+
+-- Server routes use the service role key and must retain table privileges even
+-- when row level security is enabled. These grants are safe because the key
+-- is server-only and never exposed to the browser.
+grant usage on schema public to service_role;
+grant all on table documents, document_chunks, questionnaires, questionnaire_items to service_role;
+grant usage, select on all sequences in schema public to service_role;
+grant execute on function match_document_chunks(vector, uuid, int) to service_role;

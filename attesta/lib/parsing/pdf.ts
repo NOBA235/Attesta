@@ -25,13 +25,15 @@ export async function extractPdfPages(buffer: Buffer): Promise<PdfPage[]> {
 
   try {
     await pdfParse(buffer, {
+      // Let PDF.js continue when a damaged xref can be reconstructed.
+      stopAtErrors: false,
       pagerender: async (pageData: any) => {
         const textContent = await pageData.getTextContent();
         const text = textContent.items.map((item: any) => item.str).join(" ");
         pages.push({ pageNumber: pages.length + 1, text });
         return text;
       },
-    });
+    } as any);
   } catch (err) {
     throw new Error(`Failed to parse PDF: ${err instanceof Error ? err.message : String(err)}`);
   }
@@ -40,7 +42,12 @@ export async function extractPdfPages(buffer: Buffer): Promise<PdfPage[]> {
 
   // Fallback: per-page rendering produced nothing. Re-parse for the full
   // text and treat the document as one page so ingestion still succeeds.
-  const fallback = await pdfParse(buffer);
+  let fallback;
+  try {
+    fallback = await pdfParse(buffer, { stopAtErrors: false } as any);
+  } catch (err) {
+    throw new Error(`Failed to parse PDF: ${err instanceof Error ? err.message : String(err)}`);
+  }
   if (!fallback.text?.trim()) {
     throw new Error("Could not extract any text from this PDF. It may be a scanned image without OCR.");
   }
