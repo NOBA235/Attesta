@@ -53,7 +53,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     (items ?? []).map((i) => ({ rowIndex: i.row_index, answer: i.final_answer as string }))
   );
 
-  return new NextResponse(completedBuffer, {
+  return new NextResponse(new Uint8Array(completedBuffer), {
     status: 200,
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
